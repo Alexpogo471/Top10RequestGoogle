@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Top10RequestGoogle</string>
+    <string name="btn_search">поиск</string>
 </resources>
