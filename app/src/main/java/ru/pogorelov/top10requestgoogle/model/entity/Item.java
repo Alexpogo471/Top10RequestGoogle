@@ -1,10 +1,13 @@
-package ru.pogorelov.top10requestgoogle.model;
+package ru.pogorelov.top10requestgoogle.model.entity;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
-
+@Entity
 public class Item {
 
     @SerializedName("title")
@@ -12,6 +15,7 @@ public class Item {
     private String title;
     @SerializedName("link")
     @Expose
+    @PrimaryKey
     private String url;
     @SerializedName("snippet")
     @Expose
