@@ -1,6 +1,8 @@
 package ru.pogorelov.top10requestgoogle.model.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -10,17 +12,26 @@ import java.util.Objects;
 @Entity
 public class Item {
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     @SerializedName("title")
     @Expose
     private String title;
     @SerializedName("link")
     @Expose
-    @PrimaryKey
     private String url;
     @SerializedName("snippet")
     @Expose
     private String description;
 
+    public Item(int id,String title, String url, String description) {
+        this.id = id;
+        this.title = title;
+        this.url = url;
+        this.description = description;
+    }
+
+    @Ignore
     public Item(String title, String url, String description) {
         this.title = title;
         this.url = url;
@@ -31,16 +42,26 @@ public class Item {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Item that = (Item) o;
-        return Objects.equals(title, that.title) &&
-                Objects.equals(url, that.url) &&
-                Objects.equals(description, that.description);
+        Item item = (Item) o;
+        return id == item.id &&
+                Objects.equals(title, item.title) &&
+                Objects.equals(url, item.url) &&
+                Objects.equals(description, item.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, url, description);
+        return Objects.hash(id, title, url, description);
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     public String getTitle() {
         return title;
