@@ -48,13 +48,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
         return items.size();
     }
 
-    public class MainHolder extends RecyclerView.ViewHolder {
+    class MainHolder extends RecyclerView.ViewHolder {
 
         private TextView tv_title;
         private TextView tv_description;
         private TextView tv_link;
 
-        public MainHolder(@NonNull View itemView) {
+        MainHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_title = itemView.findViewById(R.id.tv_title);

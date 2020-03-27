@@ -12,5 +12,8 @@ public interface MainView extends MvpView {
     @StateStrategyType(AddToEndStrategy.class)
     void showResponseGoogle(List<Item> items);
 
+    @StateStrategyType(AddToEndStrategy.class)
+    void showError(Throwable t);
+
 
 }

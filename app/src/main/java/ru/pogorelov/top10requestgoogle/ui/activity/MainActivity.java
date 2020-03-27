@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LiveData;
@@ -49,6 +50,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     private List<Item> items = new ArrayList<>();
     private AppDatabase database;
     private DividerItemDecoration dividerItemDecoration;
+    private ConstraintLayout layout;
 
     @InjectPresenter
     MainPresenter presenter;
@@ -61,6 +63,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         App.context = this;
 
         database = AppDatabase.getInstance(this);
+        layout = findViewById(R.id.mainLayout);
 
         et_search = findViewById(R.id.et_search);
         btn_search = findViewById(R.id.btn_search);
@@ -71,24 +74,19 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         recyclerView.setAdapter(adapter);
         dividerItemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Item item = adapter.getItems().get(position);
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse(item.getUrl()));
                 startActivity(browserIntent);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
             }
         });
-
-
-
 
         btn_search.setOnClickListener(v -> {
             String request = et_search.getText().toString();
             presenter.loadResponse(request);
+            hideKeyboard(this);
         });
     }
 
@@ -107,24 +105,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     }
 
-
-
-
     @Override
     public void showResponseGoogle(List<Item> items) {
         adapter.setItems(items);
     }
 
-    public void getAllData(){
-        LiveData<List<Item>> itemsFromDb = database.getItemDao().getAllItems();
-        itemsFromDb.observe(this, new Observer<List<Item>>() {
-            @Override
-            public void onChanged(List<Item> itemsFromDb) {
-                items.addAll(itemsFromDb);
-                adapter.notifyDataSetChanged();
-            }
-        });
-
+    @Override
+    public void showError(Throwable t) {
+        Toast.makeText(this,t.toString(),Toast.LENGTH_SHORT).show();
     }
 
     public static void hideKeyboard(Activity activity) {
@@ -137,4 +125,5 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
 }
